@@ -27,16 +27,39 @@ void DebugConsole::Hide() {
     FreeConsole();
 }
 
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
+    if (IsWindowVisible(hwnd)) {
+        wchar_t windowTitle[256];
+        int length = GetWindowTextW(hwnd, windowTitle, sizeof(windowTitle) / sizeof(wchar_t));
+        if (length > 0) {
+            wprintf(L"[INF] Window: %s\n", windowTitle);  // log the title
+        }
+        else {
+            wprintf(L"[WRN] Window with no title detected.\n");  // if no title is found
+        }
+    }
+    return TRUE;  // continue enumerating windows
+}
+
+
+void ListOpenWindows() {
+    EnumWindows(EnumWindowsProc, 0);
+}
+
 void DebugConsole::RunCommandLoop() {
     std::string command;
     while (true) {
         std::getline(std::cin, command);
-        if (command == "list") {
+        if (command == "help") {
+            std::cout << "[INF] [1] 'list' - lists all current open windows (of applications)\n[INF] [2] 'exit' - exits the console\n";
+        }
+        else if (command == "list") {
             std::cout << "[INF] Listing all open windows...\n";
+            ListOpenWindows();
         }
         else if (command == "exit") {
-            std::cout << "[INF] Closing debug console...\n";
-            Hide();
+            FreeConsole();
+            std::cout << "[INF] Terminated the console\n";
             break;
         }
         else {
