@@ -46,24 +46,54 @@ void ListOpenWindows() {
     EnumWindows(EnumWindowsProc, 0);
 }
 
-void DebugConsole::RunCommandLoop() {
-    std::string command;
-    while (true) {
-        std::getline(std::cin, command);
-        if (command == "help") {
-            std::cout << "[INF] [1] 'list' - lists all current open windows (of applications)\n[INF] [2] 'exit' - exits the console\n";
-        }
-        else if (command == "list") {
-            std::cout << "[INF] Listing all open windows...\n";
+void DebugConsole::ParseCommand(const std::string& command) {
+    size_t spacePos = command.find(' ');
+    std::string cmd = command.substr(0, spacePos);
+    std::string args = (spacePos != std::string::npos) ? command.substr(spacePos + 1) : "";
+
+    if (cmd == "help") {
+        std::cout << "[INF] [1] 'list' - lists all current open windows (of applications)\n[INF] [2] 'exit' - exits the console\n";
+    }
+    else if (cmd == "list") {
+        if (args == "--verbose") {
             ListOpenWindows();
         }
-        else if (command == "exit") {
-            FreeConsole();
-            std::cout << "[INF] Terminated the console\n";
-            break;
-        }
         else {
-            std::cout << "[ERR] Unknown command: " << command << "\n";
+            ListOpenWindows();
         }
     }
+    else {
+        std::cout << "[ERR] Unknown command: " << cmd << std::endl;
+    }
+}
+
+void DebugConsole::RunCommandLoop() {
+    std::string input;
+
+    // Map to handle different commands
+    std::map<std::string, void(DebugConsole::*)()> commandMap = {
+        {"list", &DebugConsole::ListWindows},
+        {"help", &DebugConsole::DebugMode},
+        {"exit", &DebugConsole::Exit}
+    };
+
+    // Command loop
+    while (true) {
+        std::cout << "> ";  // Display a prompt
+        std::getline(std::cin, input);  // Read user input
+
+        // Find the command in the map and execute the corresponding function
+        auto cmd = commandMap.find(input);
+        if (cmd != commandMap.end()) {
+            (this->*(cmd->second))();  // Call the corresponding function
+        }
+        else {
+            std::cout << "[ERR] Unknown command: " << input << std::endl;
+        }
+    }
+}
+
+void DebugConsole::Exit() {
+    std::cout << "Exiting debug console...\n";
+    exit(0);  // exit the program
 }
