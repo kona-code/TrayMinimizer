@@ -1,4 +1,5 @@
 #include "Tray.h"
+#include "Resource.h"
 #include <cstring>
 
 TrayIcon::TrayIcon() : m_callbackMessage(WM_USER + 1) {
@@ -11,6 +12,7 @@ TrayIcon::~TrayIcon() {
 }
 
 bool TrayIcon::CreateTrayIcon(HWND hwnd, HINSTANCE hInstance) {
+
     m_nid.cbSize = sizeof(m_nid);
     m_nid.hWnd = hwnd;
     m_nid.uID = 1;
@@ -18,11 +20,15 @@ bool TrayIcon::CreateTrayIcon(HWND hwnd, HINSTANCE hInstance) {
     m_nid.uCallbackMessage = m_callbackMessage;
     m_nid.hIcon = LoadIcon(NULL, IDI_INFORMATION);
     wcscpy_s(m_nid.szTip, L"Tray Minimizer");
-
+    Shell_NotifyIcon(NIM_MODIFY, &m_nid);
     if (!Shell_NotifyIcon(NIM_ADD, &m_nid)) {
         return false;
     }
 
+    HICON icon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON2));
+
+    m_nid.hIcon = icon;
+    Shell_NotifyIcon(NIM_MODIFY, &m_nid);
     // create a context menu for the tray icon.
     m_hMenu = CreatePopupMenu();
     AppendMenu(m_hMenu, MF_STRING, 3, L"Hide Console");
@@ -33,6 +39,7 @@ bool TrayIcon::CreateTrayIcon(HWND hwnd, HINSTANCE hInstance) {
 
     return true;
 }
+
 
 void TrayIcon::DestroyTrayIcon() {
     Shell_NotifyIcon(NIM_DELETE, &m_nid);

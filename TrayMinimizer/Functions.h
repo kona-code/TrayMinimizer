@@ -13,7 +13,7 @@ class FUNC {
 public:
     static std::vector<WindowInfo> GetOpenWindows();
     static std::vector<WindowInfo>& GetHiddenWindows();
-
+    
     static bool is_digits(const std::string& str);
     static void HideWindow(HWND hwnd);
     static void ShowWindowAgain(HWND hwnd);

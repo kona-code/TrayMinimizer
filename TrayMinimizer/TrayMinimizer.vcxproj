@@ -130,6 +130,7 @@
     <ResourceCompile Include="TrayMinimizer.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="icon.ico" />
     <Image Include="small.ico" />
     <Image Include="TrayMinimizer.ico" />
   </ItemGroup>
@@ -142,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="Console.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Tray.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

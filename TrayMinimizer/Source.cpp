@@ -85,7 +85,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         }
     }
     else if (uMsg == WM_DESTROY) {
-        PostQuitMessage(0);
+        DebugConsole console;
+        size_t i = 0;
+        if (i < console.hiddenWindows.size()) {
+            if (MessageBox(hwnd, L"Are you sure you want to quit the application?\nThis will stop all current processes.", L"Confirm Exit", MB_ICONQUESTION | MB_YESNO) == IDNO) {
+                return 0; // Prevent closing
+            }
+            else {
+                PostQuitMessage(0);
+            }
+        }
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

@@ -1,6 +1,6 @@
 #pragma once
-
 #include <windows.h>
+
 
 class TrayIcon {
 public:
@@ -19,6 +19,7 @@ public:
     // returns the tray icon's notification message ID
     UINT GetCallbackMessage() const { return m_callbackMessage; }
     void UpdateTrayMenu();
+    void UpdateIcon(HICON icon);
 
 private:
     NOTIFYICONDATA m_nid;

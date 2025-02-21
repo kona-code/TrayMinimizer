@@ -24,7 +24,7 @@ void DebugConsole::Show() {
     std::cout << "      (C) NightVoid Entertainment\n";
     DebugConsole::SetConsoleColor(3);
     std::cout << "         https://nightvoid.com/\n";
-    DebugConsole::SetConsoleColor(14);
+    DebugConsole::SetConsoleColor(7);
     std::cout << "              By Kona Code\n\n";
     DebugConsole::SetConsoleColor(7);
     std::cout << "Copyright Policy: ";
