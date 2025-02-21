@@ -1,23 +1,17 @@
 #pragma once
 #include <windows.h>
-#include <thread>
-#include <iostream>
+#include <vector>
+#include <string>
 
-class FUNC
-{
-public:
-	FUNC();
-	~FUNC();
-
-
-
-private:
+struct WindowInfo {
+    HWND hwnd;
+    std::string title;
 };
 
-FUNC::FUNC()
-{
-}
-
-FUNC::~FUNC()
-{
-}
+class FUNC {
+public:
+    static void ListOpenWindows();
+    static std::vector<WindowInfo> GetOpenWindows();
+    static void HideWindow(HWND hwnd);
+    static void ShowWindowAgain(HWND hwnd);
+};

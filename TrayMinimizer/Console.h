@@ -3,8 +3,8 @@
 #include <map>
 #include <iostream>
 #include <thread>
+#include <vector>
 #include <windows.h>
-#include <cstdio>
 
 class DebugConsole {
 public:
@@ -36,7 +36,9 @@ public:
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
     }
 
-
+    void HideWindow();
+    void ShowWindowAgain();
+    std::vector<HWND> hiddenWindows;
 private:
     // function that runs the command loop
     void RunCommandLoop();
@@ -44,13 +46,8 @@ private:
     void ParseCommand(const std::string& command);
 
 
+    void HelpFunction();
     void ListWindows();
-    void ListAllWindows();
-
     void Exit();
 
-    void DebugMode() {
-        std::cout << "Entering debug mode..." << std::endl;
-        // Add the debug mode logic here
-    }
 };
