@@ -25,7 +25,7 @@ bool TrayIcon::CreateTrayIcon(HWND hwnd, HINSTANCE hInstance) {
 
     // create a context menu for the tray icon.
     m_hMenu = CreatePopupMenu();
-    AppendMenu(m_hMenu, MF_STRING, 1, L"Debug"); // option to show debug console
+    AppendMenu(m_hMenu, MF_STRING, 1, L"Debug Console"); // option to show debug console
     AppendMenu(m_hMenu, MF_SEPARATOR, 0, NULL);
     AppendMenu(m_hMenu, MF_STRING, 3, L"Exit");    // option to exit
 

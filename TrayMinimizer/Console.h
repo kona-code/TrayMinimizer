@@ -3,6 +3,8 @@
 #include <map>
 #include <iostream>
 #include <thread>
+#include <windows.h>
+#include <cstdio>
 
 class DebugConsole {
 public:
@@ -30,16 +32,20 @@ public:
         }
     }
 
+    void SetConsoleColor(int color) {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+    }
+
+
 private:
     // function that runs the command loop
     void RunCommandLoop();
 
     void ParseCommand(const std::string& command);
 
-    void ListWindows() {
-        std::cout << "Listing windows..." << std::endl;
-        // Add the window listing logic here
-    }
+
+    void ListWindows();
+    void ListAllWindows();
 
     void Exit();
 
