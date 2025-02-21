@@ -14,9 +14,6 @@ public:
     // show the console and start the command loop in a separate thread
     void Show();
 
-    // hide (or close) the console
-    void Hide();
-
     void Start() {
         std::string input;
         while (true) {
@@ -28,7 +25,6 @@ public:
                 break; // Exit the loop
             }
 
-            ParseCommand(input); // Call method to parse and handle subcommands
         }
     }
 
@@ -38,16 +34,18 @@ public:
 
     void HideWindow();
     void ShowWindowAgain();
+    void RestoreWindow();
     std::vector<HWND> hiddenWindows;
-private:
-    // function that runs the command loop
+
     void RunCommandLoop();
 
-    void ParseCommand(const std::string& command);
+private:
+    // function that runs the command loop
+    bool consoleAlive;
 
-
-    void HelpFunction();
-    void ListWindows();
-    void Exit();
+    void HelpFunction(); 
+    void ListWindows(const std::string& option);
+    void Hide();
+    void Quit();
 
 };

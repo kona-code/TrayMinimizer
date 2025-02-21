@@ -6,12 +6,15 @@
 struct WindowInfo {
     HWND hwnd;
     std::string title;
+    bool isVisible;
 };
 
 class FUNC {
 public:
-    static void ListOpenWindows();
     static std::vector<WindowInfo> GetOpenWindows();
+    static std::vector<WindowInfo>& GetHiddenWindows();
+
     static void HideWindow(HWND hwnd);
     static void ShowWindowAgain(HWND hwnd);
+    static void RestoreWindow(HWND hwnd);
 };

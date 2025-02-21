@@ -17,7 +17,7 @@ bool TrayIcon::CreateTrayIcon(HWND hwnd, HINSTANCE hInstance) {
     m_nid.uFlags = NIF_ICON | NIF_TIP | NIF_MESSAGE;
     m_nid.uCallbackMessage = m_callbackMessage;
     m_nid.hIcon = LoadIcon(NULL, IDI_INFORMATION);
-    wcscpy_s(m_nid.szTip, L"Tray Minimized App");
+    wcscpy_s(m_nid.szTip, L"Tray Minimizer");
 
     if (!Shell_NotifyIcon(NIM_ADD, &m_nid)) {
         return false;
@@ -25,9 +25,10 @@ bool TrayIcon::CreateTrayIcon(HWND hwnd, HINSTANCE hInstance) {
 
     // create a context menu for the tray icon.
     m_hMenu = CreatePopupMenu();
-    AppendMenu(m_hMenu, MF_STRING, 1, L"Debug Console"); // option to show debug console
+    AppendMenu(m_hMenu, MF_STRING, 1, L"Console"); // option to show debug console
     AppendMenu(m_hMenu, MF_SEPARATOR, 0, NULL);
     AppendMenu(m_hMenu, MF_STRING, 3, L"Exit");    // option to exit
+
 
     return true;
 }

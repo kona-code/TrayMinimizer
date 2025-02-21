@@ -20,7 +20,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
     // register the window class.
-    const wchar_t CLASS_NAME[] = L"MyWindowClass";
+    const wchar_t CLASS_NAME[] = L"TrayMinimizer";
     WNDCLASS wc = {};
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
@@ -36,8 +36,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     if (!hwnd) return 0;
 
-    ShowWindow(hwnd, nCmdShow);
-
+    // show console
+    g_DebugConsole.Show();
     // create the tray icon.
     g_TrayIcon.CreateTrayIcon(hwnd, hInstance);
 
@@ -47,6 +47,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+
 
     return 0;
 }

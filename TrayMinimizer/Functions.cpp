@@ -1,35 +1,27 @@
 #include "Functions.h"
 #include <iostream>
 
+static std::vector<WindowInfo> hiddenWindows;
+
 std::vector<WindowInfo> FUNC::GetOpenWindows() {
     std::vector<WindowInfo> windows;
 
     EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL {
-        char title[256];
+        char title[256] = { 0 };
         GetWindowTextA(hwnd, title, sizeof(title));
-
-        if (IsWindowVisible(hwnd) && strlen(title) > 0) {
+        // Only add windows that have a title.
+        if (strlen(title) > 0) {
             auto* windows = reinterpret_cast<std::vector<WindowInfo>*>(lParam);
-            windows->push_back({ hwnd, title });
+            WindowInfo info;
+            info.hwnd = hwnd;
+            info.title = title;
+            info.isVisible = IsWindowVisible(hwnd) != 0;
+            windows->push_back(info);
         }
         return TRUE;
         }, reinterpret_cast<LPARAM>(&windows));
 
     return windows;
-}
-
-void FUNC::ListOpenWindows() {
-    std::vector<WindowInfo> windows = GetOpenWindows();
-
-    if (windows.empty()) {
-        std::cout << "No open windows found.\n";
-        return;
-    }
-
-    std::cout << "Open Windows:\n";
-    for (size_t i = 0; i < windows.size(); ++i) {
-        std::cout << "[" << i << "] " << windows[i].title << std::endl;
-    }
 }
 
 // function to hide a window and remove it from the taskbar
@@ -46,4 +38,15 @@ void FUNC::ShowWindowAgain(HWND hwnd) {
 
     SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) & ~WS_EX_TOOLWINDOW);  // restore to taskbar
     ShowWindow(hwnd, SW_SHOW);  // restore window
+}
+
+void FUNC::RestoreWindow(HWND hwnd) {
+    // Check if the window is minimized or hidden and restore it
+    ShowWindow(hwnd, SW_SHOWNORMAL);  // Restores the window to its normal state
+    SetForegroundWindow(hwnd);        // Optionally bring the window to the foreground
+}
+
+
+std::vector<WindowInfo>& FUNC::GetHiddenWindows() {
+    return hiddenWindows;
 }
