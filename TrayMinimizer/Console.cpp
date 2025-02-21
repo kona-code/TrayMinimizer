@@ -183,21 +183,27 @@ void DebugConsole::HideWindow() {
     std::cout << "Enter window number to hide: ";
     std::string windowIndexStr;
     std::getline(std::cin, windowIndexStr);
+    if (FUNC::is_digits(windowIndexStr)) {
+        // ensure the selected index is valid
+        int windowIndex = std::stoi(windowIndexStr);
 
-    int windowIndex = std::stoi(windowIndexStr);
-
-    // ensure the selected index is valid
-    if (windowIndex >= 0 && windowIndex < visibleWindows.size()) {
-        HWND hwnd = visibleWindows[windowIndex].hwnd;
-        FUNC::HideWindow(hwnd);
-        hiddenWindows.push_back(hwnd);  // store hidden window
-        DebugConsole::SetConsoleColor(10);
-        std::cout << "[INF] Window hidden.\n";
-        DebugConsole::SetConsoleColor(7);
+        if (windowIndex >= 0 && windowIndex < visibleWindows.size()) {
+            HWND hwnd = visibleWindows[windowIndex].hwnd;
+            FUNC::HideWindow(hwnd);
+            hiddenWindows.push_back(hwnd);  // store hidden window
+            DebugConsole::SetConsoleColor(10);
+            std::cout << "[INF] Window hidden.\n";
+            DebugConsole::SetConsoleColor(7);
+        }
+        else {
+            DebugConsole::SetConsoleColor(12);
+            std::cout << "[ERR] Invalid selection.\n";
+            DebugConsole::SetConsoleColor(7);
+        }
     }
     else {
         DebugConsole::SetConsoleColor(12);
-        std::cout << "[ERR] Invalid selection.\n";
+        std::cout << "[ERR] Invalid input. Input may only consist of numbers. Use the numbers located on the right of given window list.\n";
         DebugConsole::SetConsoleColor(7);
     }
 }
@@ -226,21 +232,29 @@ void DebugConsole::ShowWindowAgain() {
     std::cout << "Enter window number to restore: ";
     std::string input;
     std::getline(std::cin, input);
-    int index = std::stoi(input);
+    if (FUNC::is_digits(input)) {
+        int index = std::stoi(input);
 
-    if (index >= 0 && index < hiddenWindows.size()) {
-        HWND hwnd = hiddenWindows[index];
-        FUNC::ShowWindowAgain(hwnd);
-        hiddenWindows.erase(hiddenWindows.begin() + index);
-        DebugConsole::SetConsoleColor(10);
-        std::cout << "[INF] Window restored.\n";
-        DebugConsole::SetConsoleColor(7);
+        if (index >= 0 && index < hiddenWindows.size()) {
+            HWND hwnd = hiddenWindows[index];
+            FUNC::ShowWindowAgain(hwnd);
+            hiddenWindows.erase(hiddenWindows.begin() + index);
+            DebugConsole::SetConsoleColor(10);
+            std::cout << "[INF] Window restored.\n";
+            DebugConsole::SetConsoleColor(7);
+        }
+        else {
+            DebugConsole::SetConsoleColor(12);
+            std::cout << "[ERR] Invalid selection.\n";
+            DebugConsole::SetConsoleColor(7);
+        }
     }
     else {
         DebugConsole::SetConsoleColor(12);
-        std::cout << "[ERR] Invalid selection.\n";
+        std::cout << "[ERR] Invalid input. Input may only consist of numbers. Use the numbers located on the right of given window list.\n";
         DebugConsole::SetConsoleColor(7);
     }
+
 }
 
 void DebugConsole::RestoreWindow() {
@@ -275,18 +289,25 @@ void DebugConsole::RestoreWindow() {
     std::cout << "Enter the number of the window you want to restore: ";
     std::string windowIndexStr;
     std::getline(std::cin, windowIndexStr);
+    if (FUNC::is_digits(windowIndexStr)) {
+        int windowIndex = std::stoi(windowIndexStr);
 
-    int windowIndex = std::stoi(windowIndexStr);
-    if (windowIndex >= 0 && windowIndex < windows.size()) {
-        HWND hwnd = windows[windowIndex].hwnd;
-        FUNC::RestoreWindow(hwnd);  // function to forcefully restore the window (unhide it) if the program was closed
-        DebugConsole::SetConsoleColor(10);
-        std::cout << "[INF] Window restored.\n";
-        DebugConsole::SetConsoleColor(7);
+        if (windowIndex >= 0 && windowIndex < windows.size()) {
+            HWND hwnd = windows[windowIndex].hwnd;
+            FUNC::RestoreWindow(hwnd);  // function to forcefully restore the window (unhide it) if the program was closed
+            DebugConsole::SetConsoleColor(10);
+            std::cout << "[INF] Window restored.\n";
+            DebugConsole::SetConsoleColor(7);
+        }
+        else {
+            DebugConsole::SetConsoleColor(10);
+            std::cout << "[ERR] Invalid selection.\n";
+            DebugConsole::SetConsoleColor(7);
+        }
     }
     else {
-        DebugConsole::SetConsoleColor(10);
-        std::cout << "[ERR] Invalid selection.\n";
+        DebugConsole::SetConsoleColor(12);
+        std::cout << "[ERR] Invalid input. Input may only consist of numbers. Use the numbers located on the right of given window list.\n";
         DebugConsole::SetConsoleColor(7);
     }
 }
