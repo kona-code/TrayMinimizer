@@ -1,4 +1,5 @@
 #include "Functions.h"
+#include "Console.h" // for hiding console
 #include <iostream>
 
 static std::vector<WindowInfo> hiddenWindows;

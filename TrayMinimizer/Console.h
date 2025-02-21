@@ -36,16 +36,17 @@ public:
     void ShowWindowAgain();
     void RestoreWindow();
     std::vector<HWND> hiddenWindows;
-
+    void ShowFromTray();
+    void HideFromTray();
     void RunCommandLoop();
 
 private:
     // function that runs the command loop
     bool consoleAlive;
 
+    void ClearConsole();
     void HelpFunction(); 
     void ListWindows(const std::string& option);
-    void Hide();
     void Quit();
 
 };

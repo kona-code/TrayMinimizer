@@ -30,7 +30,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // create the window.
     HWND hwnd = CreateWindowExW(
         0, CLASS_NAME, L"Tray Minimized App", WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 500, 300,
+        CW_USEDEFAULT, CW_USEDEFAULT, 512, 512,
         NULL, NULL, hInstance, NULL
     );
 
@@ -57,15 +57,28 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     // handle tray icon callback messages.
     if (uMsg == g_TrayIcon.GetCallbackMessage()) {
         if (lParam == WM_RBUTTONUP) {
+            g_TrayIcon.UpdateTrayMenu();
             g_TrayIcon.ShowContextMenu(hwnd);
         }
     }
     else if (uMsg == WM_COMMAND) {
         switch (LOWORD(wParam)) {
         case 1: // "Debug" selected from the tray menu.
-            g_DebugConsole.Show();
+            g_DebugConsole.ShowFromTray();
             break;
         case 3: // "Exit" selected from the tray menu.
+            g_DebugConsole.HideFromTray();
+            break;
+        case 4:
+            ShellExecute(NULL, L"open", L"https://github.com/kona-code/TrayMinimizer", NULL, NULL, SW_SHOWNORMAL);
+            break;
+        case 5:
+            ShellExecute(NULL, L"open", L"https://software.nightvoid.com/stable/#tray-minimizer", NULL, NULL, SW_SHOWNORMAL);
+            break;
+        case 6:
+            ShellExecute(NULL, L"open", L"https://nightvoid.com/github", NULL, NULL, SW_SHOWNORMAL);
+            break;
+        case 7: // "Exit" selected from the tray menu.
             g_TrayIcon.DestroyTrayIcon();
             PostQuitMessage(0);
             break;

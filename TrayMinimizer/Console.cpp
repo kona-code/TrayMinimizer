@@ -19,12 +19,22 @@ void DebugConsole::Show() {
     freopen_s(&fp, "CONOUT$", "w", stdout);
     freopen_s(&fp, "CONIN$", "r", stdin);
     // copyright notice
+    DebugConsole::SetConsoleColor(15);
     std::cout << "@@@@@@@@*.                   =@@@@@@@@- \n@@-::::-#@*.               =@%=:::::%@=:\n@@-:     :#@*.           =@%=::.    #@=:\n@@=:       :#@*.       =@%=::.      %@=:\n.*@#:        :#@*.   =@%=::.      +@#-::\n  .*@#:        :#@- %%=::.      +@#-::. \n    .*@#:         .:  :.      +@#-::.   \n      .*@#:                 +@#-::.     \n        .*@*              -@#-::.       \n           ::.             .::.         \n         =@#              =@*.          \n       =@%=::.             :#@*.        \n     =@%=::.                 :#@*.      \n   =@%=::.      +%: #*:        :#@*.    \n =@%=::.      +@#-::.*@#:        :#@*.  \n@@=::.      +@#-::.   .*@#:        :%@- \n@@-:      +@#-::.       .*@#:       #@=:\n@@-:    +@#-::.           .*@#:     #@=:\n@@@@%%%@#-::.               .*@%%%%%@@=:\n.:------::.                    :-------:\n\n";
     std::cout << "      (C) NightVoid Entertainment\n";
+    DebugConsole::SetConsoleColor(3);
     std::cout << "         https://nightvoid.com/\n";
-    std::cout << "              By Kona Code\n\n\n";
-    std::cout << "Copyright Policy: https://nightvoid.com/copyright\n";
-    std::cout << "Terms of Service: https://nightvoid.com/terms-of-service\n\n";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "              By Kona Code\n\n";
+    DebugConsole::SetConsoleColor(7);
+    std::cout << "Copyright Policy: ";
+    DebugConsole::SetConsoleColor(3);
+    std::cout << "https://nightvoid.com/copyright\n";
+    DebugConsole::SetConsoleColor(7);
+    std::cout << "Terms of Service: ";
+    DebugConsole::SetConsoleColor(3);
+    std::cout << "https://nightvoid.com/terms-of-service\n\n";
+    DebugConsole::SetConsoleColor(7);
     std::cout << "[INF] Console initialized.\n";
     std::thread t(&DebugConsole::RunCommandLoop, this);
     t.detach();
@@ -37,32 +47,47 @@ void DebugConsole::RunCommandLoop() {
         std::cout << "> ";
         std::getline(std::cin, input);
 
-        if (input == "help") {
+        if (input == "help" || input == "man" || input == "manual") {
             HelpFunction();
         }
-        else if (input == "list") {
-            ListWindows(""); // default: show all
+        else if (input == "list" || input == "l") {
+            ListWindows("");
         }
-        else if (input == "list -all" || input == "list -a") {
+        else if (input == "list -all" || input == "list -a" || input == "la") {
             ListWindows("-all");
         }
-        else if (input == "list -hidden" || input == "list -h") {
+        else if (input == "list -hidden" || input == "list -h" || input == "lh") {
             ListWindows("-hidden");
         }
-        else if (input == "hide") {
+        else if (input == "hide" || input == "h") {
             HideWindow();
         }
-        else if (input == "show") {
+        else if (input == "show" || input == "s") {
             ShowWindowAgain();
         }
-        else if (input == "restore") {
+        else if (input == "restore" || input == "r") {
             RestoreWindow();
         }
-        else if (input == "quit" || "terminate") {
-            Quit();
+        else if (input == "about" || input == "github" || input == "code") {
+            ShellExecute(NULL, L"open", L"https://github.com/kona-code/TrayMinimizer", NULL, NULL, SW_SHOWNORMAL);
         }
-        else if (input == "exit") {
-            Hide();
+        else if (input == "author" || input == "publisher" || input == "kona") {
+            ShellExecute(NULL, L"open", L"https://github.com/kona-code/", NULL, NULL, SW_SHOWNORMAL);
+        }
+        else if (input == "update") {
+            ShellExecute(NULL, L"open", L"https://software.nightvoid.com/stable/#tray-minimizer", NULL, NULL, SW_SHOWNORMAL);
+        }
+        else if (input == "ver" || input == "version" || input == "v") {
+            std::cout << "Currently running version 1.0\n";
+        }
+        else if (input == "hide -console" || input == "exit" || input == "hc") {
+            HideFromTray();
+        }
+        else if (input == "terminate" || input == "quit") {
+            DebugConsole::Quit();
+        }
+        else if (input == "clear" || input == "clean" || input == "c") {
+            ClearConsole();
         }
         else {
             DebugConsole::SetConsoleColor(12);
@@ -125,7 +150,6 @@ void DebugConsole::ListWindows(const std::string& option) {
             DebugConsole::SetConsoleColor(7);
         }
     }
-    
     else {
         std::cout << "[INF] List of visible windows:\n";
         std::vector<WindowInfo> windows = FUNC::GetOpenWindows();
@@ -180,7 +204,7 @@ void DebugConsole::HideWindow() {
         return;
     }
 
-    std::cout << "Enter window number to hide: ";
+    std::cout << "\nEnter window number to hide: ";
     std::string windowIndexStr;
     std::getline(std::cin, windowIndexStr);
     if (FUNC::is_digits(windowIndexStr)) {
@@ -229,7 +253,7 @@ void DebugConsole::ShowWindowAgain() {
         std::cout << title << std::endl;
     }
 
-    std::cout << "Enter window number to restore: ";
+    std::cout << "\nEnter window number to restore: ";
     std::string input;
     std::getline(std::cin, input);
     if (FUNC::is_digits(input)) {
@@ -286,7 +310,7 @@ void DebugConsole::RestoreWindow() {
     }
 
     // ask the user to select a window to restore
-    std::cout << "Enter the number of the window you want to restore: ";
+    std::cout << "\nEnter the number of the window you want to restore: ";
     std::string windowIndexStr;
     std::getline(std::cin, windowIndexStr);
     if (FUNC::is_digits(windowIndexStr)) {
@@ -316,86 +340,167 @@ void DebugConsole::RestoreWindow() {
 // scuffed but works
 void DebugConsole::HelpFunction() {
     DebugConsole::SetConsoleColor(14);
-    std::cout << "[ALL COMMANDS ARE CASE SENSETIVE]\n\n";
+    std::cout << "\n[ALL COMMANDS ARE CASE SENSETIVE]\n\n";
     DebugConsole::SetConsoleColor(3);
     std::cout << "[";
     DebugConsole::SetConsoleColor(10);
     std::cout << "1";
     DebugConsole::SetConsoleColor(3);
     std::cout << "]";
+    std::cout << ">--------------------------------------------";
     DebugConsole::SetConsoleColor(11);
-    std::cout << " help command:\n";
+    std::cout << "< help command >";
+    DebugConsole::SetConsoleColor(3);
+    std::cout << "--------------------------------------------<\n\n";
     DebugConsole::SetConsoleColor(14);
-    std::cout << "'help'";
+    std::cout << "  'help'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << " - shows all commands, and explains what they do.\n\n";
-    DebugConsole::SetConsoleColor(7);
+    std::cout << "\n - shows all commands, and explains what they do.\n\n";
     DebugConsole::SetConsoleColor(3);
     std::cout << "[";
     DebugConsole::SetConsoleColor(10);
     std::cout << "2";
     DebugConsole::SetConsoleColor(3);
     std::cout << "]";
+    std::cout << ">------------------------------------------";
     DebugConsole::SetConsoleColor(11);
-    std::cout << " listing commands:\n";
+    std::cout << "< listing commands >";
+    DebugConsole::SetConsoleColor(3);
+    std::cout << "------------------------------------------<\n\n";
     DebugConsole::SetConsoleColor(14);
-    std::cout << "'list'";
+    std::cout << "  'list'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << " or ";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "'l'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << " - shows all currently detectable windows, that have titles.\n";
+    std::cout << "\n - shows all detected windows, that have titles.\n\n";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "  'list -all'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << ", ";
     DebugConsole::SetConsoleColor(14);
     std::cout << "'list -a'";
     DebugConsole::SetConsoleColor(6);
     std::cout << " or ";
     DebugConsole::SetConsoleColor(14);
-    std::cout << "'list -all'";
+    std::cout << "'la'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << " - shows all currently detectable windows, including overlays, system windows, etc.\n";
+    std::cout << "\n - shows all detected windows, including hidden overlays, system windows, etc.\n\n";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "  'list -hidden'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << ", ";
     DebugConsole::SetConsoleColor(14);
     std::cout << "'list -h'";
     DebugConsole::SetConsoleColor(6);
     std::cout << " or ";
     DebugConsole::SetConsoleColor(14);
-    std::cout << "'list -hidden'";
+    std::cout << "'lh'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << " - shows all windows, hidden by the user/TrayMinimizer. Windows hidden by the operating system will not be listed.\n\n";
+    std::cout << "\n - shows all windows, hidden by the user/TrayMinimizer in the current session.\n   Windows hidden by the operating system will not be listed.\n\n";
     DebugConsole::SetConsoleColor(3);
     std::cout << "[";
     DebugConsole::SetConsoleColor(10);
     std::cout << "3";
     DebugConsole::SetConsoleColor(3);
     std::cout << "]";
+    std::cout << ">----------------------------------------------";
     DebugConsole::SetConsoleColor(11);
-    std::cout << " controls:\n";
+    std::cout << "< controls >";
+    DebugConsole::SetConsoleColor(3);
+    std::cout << "----------------------------------------------<\n\n";
     DebugConsole::SetConsoleColor(14);
-    std::cout << "'hide'";
-    DebugConsole::SetConsoleColor(10);
-    std::cout << " - hides a window and removes it from the taskbar.\n";
+    std::cout << "  'hide'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << " or ";
     DebugConsole::SetConsoleColor(14);
-    std::cout << "'show'";
+    std::cout << "'h'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << " - restores a previously hidden window.\n";
+    std::cout << "\n - hides a window and hides it, while it's keeping it running.\n\n";
     DebugConsole::SetConsoleColor(14);
-    std::cout << "'restore'";
-    DebugConsole::SetConsoleColor(10);
-    std::cout << " - forcefully shows the window, and puts it on in front of the rest.";
+    std::cout << "  'show'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << " or ";
     DebugConsole::SetConsoleColor(14);
-    std::cout << " Use if you want to recover a window from a previous session.\n";
-    std::cout << "'exit'";
+    std::cout << "'s'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << " - closes the console, but keeps the background process running.\n";
+    std::cout << "\n - restores a previously hidden window.\n\n";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "  'restore'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << " or ";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "'r'";
+    DebugConsole::SetConsoleColor(10);
+    std::cout << "\n - forcefully shows any window, and puts it on in front of the rest.\n";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "   Use if you want to recover a window from a previous session.\n\n";
+    std::cout << "  'clear'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << ", ";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "'clean'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << " or ";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "'c'";
+    DebugConsole::SetConsoleColor(10);
+    std::cout << "\n - clears all current text and issued commands from the console.\n\n";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "  'terminate'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << " or ";
     DebugConsole::SetConsoleColor(14);
     std::cout << "'quit'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << " - terminates all operations and exits the application.";
+    std::cout << "\n - terminates all operations and exits the application.\n";
     DebugConsole::SetConsoleColor(12);
-    std::cout << " Show all windows, before executing. Use recover function if you forgot to.\n";
+    std::cout << "   Show all windows, before executing. Use recover function if you forgot to.\n\n\n";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "  'exit'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << ", ";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "'hide -console'";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << " or ";
+    DebugConsole::SetConsoleColor(14);
+    std::cout << "'hc'";
+    DebugConsole::SetConsoleColor(10);
+    std::cout << "\n - hides the console. You can enable it again using the tray icon.\n\n";
     DebugConsole::SetConsoleColor(7);
 }
 
-void DebugConsole::Hide() {
+void DebugConsole::ClearConsole() {
+    // Get the console handle
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Get the console screen buffer info
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+
+    // Set the console cursor position to the top left
+    COORD topLeft = { 0, 0 };
+    SetConsoleCursorPosition(hConsole, topLeft);
+
+    // Fill the screen with spaces (clear screen)
+    DWORD dwWritten;
+    FillConsoleOutputCharacter(hConsole, ' ', csbi.dwSize.X * csbi.dwSize.Y, topLeft, &dwWritten);
+    FillConsoleOutputAttribute(hConsole, csbi.wAttributes, csbi.dwSize.X * csbi.dwSize.Y, topLeft, &dwWritten);
+
+    // Reset the cursor position
+    SetConsoleCursorPosition(hConsole, topLeft);
+}
+
+void DebugConsole::HideFromTray() {
     HWND hwnd = GetConsoleWindow();
     FUNC::HideWindow(hwnd);
-    hiddenWindows.push_back(hwnd);  // store hidden window
+}
+
+void DebugConsole::ShowFromTray() {
+    HWND hwnd = GetConsoleWindow();
+    FUNC::ShowWindowAgain(hwnd);
 }
 
 void DebugConsole::Quit() {

@@ -18,6 +18,7 @@ public:
 
     // returns the tray icon's notification message ID
     UINT GetCallbackMessage() const { return m_callbackMessage; }
+    void UpdateTrayMenu();
 
 private:
     NOTIFYICONDATA m_nid;
