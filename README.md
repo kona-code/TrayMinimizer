@@ -1,7 +1,7 @@
 # Tray Minimizer
 
 ## Overview
-Tray Minimizer is a lightweight Windows application designed to manage console windows and background tasks via a system tray icon and a console interface. The application offers an intuitive and streamlined user experience by providing a context menu for easy access to essential functions. The tray icon remains visible even when the console window is exited via a command, ensuring users can interact with the app without unnecessary distractions.
+Tray Minimizer is a lightweight Windows application that manages windows and background tasks via a system tray icon and a console interface. The application offers an intuitive and streamlined user experience by providing a context menu for easy access to essential functions. The tray icon remains visible even when the console window is exited via a command, ensuring users can interact with the app without unnecessary distractions.
 
 ## Features
 - **System Tray Icon**: The application minimizes to the system tray and provides a consistent way to interact with your program without cluttering your taskbar or desktop.
