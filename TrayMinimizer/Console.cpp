@@ -91,7 +91,7 @@ void DebugConsole::RunCommandLoop() {
         }
         else {
             DebugConsole::SetConsoleColor(12);
-            std::cout << "[ERR] Unknown command: " << input << ", use 'help' to show all available commands." << std::endl;
+            std::cout << "[ERR] Unknown command: '" << input << "', use 'help' to show all available commands." << std::endl;
             DebugConsole::SetConsoleColor(7);
         }
     }
@@ -207,7 +207,7 @@ void DebugConsole::HideWindow() {
     std::cout << "\nEnter window number to hide: ";
     std::string windowIndexStr;
     std::getline(std::cin, windowIndexStr);
-    if (FUNC::is_digits(windowIndexStr)) {
+    if (FUNC::is_digits(windowIndexStr) && windowIndexStr.length() != 0) {
         // ensure the selected index is valid
         int windowIndex = std::stoi(windowIndexStr);
 
@@ -256,7 +256,7 @@ void DebugConsole::ShowWindowAgain() {
     std::cout << "\nEnter window number to restore: ";
     std::string input;
     std::getline(std::cin, input);
-    if (FUNC::is_digits(input)) {
+    if (FUNC::is_digits(input) && input.length() != 0) {
         int index = std::stoi(input);
 
         if (index >= 0 && index < hiddenWindows.size()) {
@@ -313,7 +313,7 @@ void DebugConsole::RestoreWindow() {
     std::cout << "\nEnter the number of the window you want to restore: ";
     std::string windowIndexStr;
     std::getline(std::cin, windowIndexStr);
-    if (FUNC::is_digits(windowIndexStr)) {
+    if (FUNC::is_digits(windowIndexStr) && windowIndexStr.length() != 0) {
         int windowIndex = std::stoi(windowIndexStr);
 
         if (windowIndex >= 0 && windowIndex < windows.size()) {
