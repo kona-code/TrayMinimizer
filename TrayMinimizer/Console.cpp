@@ -339,8 +339,6 @@ void DebugConsole::RestoreWindow() {
 
 // scuffed but works
 void DebugConsole::HelpFunction() {
-    DebugConsole::SetConsoleColor(14);
-    std::cout << "\n[ALL COMMANDS ARE CASE SENSETIVE]\n\n";
     DebugConsole::SetConsoleColor(3);
     std::cout << "[";
     DebugConsole::SetConsoleColor(10);
@@ -355,7 +353,9 @@ void DebugConsole::HelpFunction() {
     DebugConsole::SetConsoleColor(14);
     std::cout << "  'help'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << "\n - shows all commands, and explains what they do.\n\n";
+    std::cout << "\n - shows all commands, and explains what they do.\n";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << "   Note that all commands are case sensetive.\n\n";
     DebugConsole::SetConsoleColor(3);
     std::cout << "[";
     DebugConsole::SetConsoleColor(10);
@@ -374,7 +374,7 @@ void DebugConsole::HelpFunction() {
     DebugConsole::SetConsoleColor(14);
     std::cout << "'l'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << "\n - shows all detected windows, that have titles.\n\n";
+    std::cout << "\n - shows all detected windows visible on the desktop (including minimized windows).\n\n";
     DebugConsole::SetConsoleColor(14);
     std::cout << "  'list -all'";
     DebugConsole::SetConsoleColor(6);
@@ -417,7 +417,7 @@ void DebugConsole::HelpFunction() {
     DebugConsole::SetConsoleColor(14);
     std::cout << "'h'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << "\n - hides a window and hides it, while it's keeping it running.\n\n";
+    std::cout << "\n - hides a window and keeps it running in the background.\n\n";
     DebugConsole::SetConsoleColor(14);
     std::cout << "  'show'";
     DebugConsole::SetConsoleColor(6);
@@ -425,7 +425,7 @@ void DebugConsole::HelpFunction() {
     DebugConsole::SetConsoleColor(14);
     std::cout << "'s'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << "\n - restores a previously hidden window.\n\n";
+    std::cout << "\n - restores a previously hidden window.\n   You are able to recover windows hidden only in the current session.\n   Use 'restore' if your window is not listed or was hidden in a previous session.\n\n";
     DebugConsole::SetConsoleColor(14);
     std::cout << "  'restore'";
     DebugConsole::SetConsoleColor(6);
@@ -434,8 +434,9 @@ void DebugConsole::HelpFunction() {
     std::cout << "'r'";
     DebugConsole::SetConsoleColor(10);
     std::cout << "\n - forcefully shows any window, and puts it on in front of the rest.\n";
-    DebugConsole::SetConsoleColor(14);
-    std::cout << "   Use if you want to recover a window from a previous session.\n\n";
+    DebugConsole::SetConsoleColor(6);
+    std::cout << "   Use if you want to recover a window from a previous session.\n";
+    std::cout << "   You can narrow down you search by using shortcut 'CTRL + F' and entering you window title.\n\n";
     std::cout << "  'clear'";
     DebugConsole::SetConsoleColor(6);
     std::cout << ", ";
@@ -468,7 +469,7 @@ void DebugConsole::HelpFunction() {
     DebugConsole::SetConsoleColor(14);
     std::cout << "'hc'";
     DebugConsole::SetConsoleColor(10);
-    std::cout << "\n - hides the console. You can enable it again using the tray icon.\n\n";
+    std::cout << "\n - hides the console. You can enable/show it again using the tray icon.\n\n";
     DebugConsole::SetConsoleColor(7);
 }
 
