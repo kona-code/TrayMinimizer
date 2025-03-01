@@ -12,7 +12,6 @@ Tray Minimizer is a lightweight Windows application that manages windows and bac
 - **Hide/Show Windows Applications**: Minimize any window to the tray, and bring it back when needed using the console.
 - **Force-Show Windows**: Forcefully show any window hidden on your operating system.
 - **Hide/Show Console**: Minimize the console window to the tray, and bring it back when needed via the tray context menu or console commands.
-- **Open Source Code**: Quickly access the project’s source code repository to contribute, report issues, or check for updates.
 - **Exit**: Close the application completely with a simple right-click option on the tray icon.
 
 ## Ideal For:
