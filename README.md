@@ -20,4 +20,4 @@ Tray Minimizer is a lightweight Windows application that manages windows and bac
 - Users who prefer a minimalistic, non-intrusive way of running programs.
 
 ---
-```Product was tested in a Windows 10 environment.```
+```Product was tested in a Windows 10 and 11 environment.```
