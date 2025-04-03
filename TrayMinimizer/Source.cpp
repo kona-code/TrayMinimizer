@@ -1,10 +1,34 @@
 #include <windows.h>
+#include <cstdlib>
 #include "Console.h"
 #include "Tray.h"
 
 // global instances
 TrayIcon g_TrayIcon;
 DebugConsole g_DebugConsole;
+
+extern "C" int __argc;
+extern "C" char** __argv;
+
+void ProcessCmdLine() {
+    while (true) {
+    AttachConsole(ATTACH_PARENT_PROCESS);
+
+    FILE* fp;
+    freopen_s(&fp, "CONOUT$", "w", stdout);
+    freopen_s(&fp, "CONIN$", "r", stdin);
+
+    std::string fullCommand;
+    for (int i = 1; i < __argc; ++i) {
+        fullCommand += __argv[i];
+        if (i < __argc - 1) {
+            fullCommand += " ";
+        }
+    }
+
+    std::cout << g_DebugConsole.RunCommand(fullCommand);
+    }
+}
 
 // forward declaration of window procedure
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -18,30 +42,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << "Copyright Policy: https://nightvoid.com/copyright\n";
     std::cout << "Terms of Service: https://nightvoid.com/terms-of-service\n\n";
 
+    if (__argc > 1) {
+        ProcessCmdLine();
+        return 0;
+    }
+    else {
+        // register the window class.
+        const wchar_t CLASS_NAME[] = L"TrayMinimizer";
+        WNDCLASS wc = {};
+        wc.lpfnWndProc = WindowProc;
+        wc.hInstance = hInstance;
+        wc.lpszClassName = CLASS_NAME;
+        RegisterClassW(&wc);
 
-    // register the window class.
-    const wchar_t CLASS_NAME[] = L"TrayMinimizer";
-    WNDCLASS wc = {};
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = CLASS_NAME;
-    RegisterClassW(&wc);
+        // create the window.
+        HWND hwnd = CreateWindowExW(
+            0, CLASS_NAME, L"Tray Minimized App", WS_OVERLAPPEDWINDOW,
+            CW_USEDEFAULT, CW_USEDEFAULT, 512, 512,
+            NULL, NULL, hInstance, NULL
+        );
 
-    // create the window.
-    HWND hwnd = CreateWindowExW(
-        0, CLASS_NAME, L"Tray Minimized App", WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 512, 512,
-        NULL, NULL, hInstance, NULL
-    );
+        if (!hwnd) return 0;
 
-    if (!hwnd) return 0;
-
-    // show console
-    g_DebugConsole.Show();
-    // create the tray icon.
-    g_TrayIcon.CreateTrayIcon(hwnd, hInstance);
-
-    // main message loop.
+        // show console
+        g_DebugConsole.Show();
+        // create the tray icon.
+        g_TrayIcon.CreateTrayIcon(hwnd, hInstance);
+    
+        // main message loop.
     MSG msg = {};
     while (GetMessage(&msg, nullptr, 0, 0)) {
         TranslateMessage(&msg);
@@ -49,6 +77,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
 
+    return 0;
+    }
     return 0;
 }
 

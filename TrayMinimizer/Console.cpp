@@ -97,7 +97,57 @@ void DebugConsole::RunCommandLoop() {
     }
 }
 
+std::string DebugConsole::RunCommand(std::string input) {
 
+        if (input == "help" || input == "man" || input == "manual") {
+            HelpFunction();
+        }
+        else if (input == "list" || input == "l") {
+            ListWindows("");
+        }
+        else if (input == "list -all" || input == "list -a" || input == "la") {
+            ListWindows("-all");
+        }
+        else if (input == "list -hidden" || input == "list -h" || input == "lh") {
+            ListWindows("-hidden");
+        }
+        else if (input == "hide" || input == "h") {
+            HideWindow();
+        }
+        else if (input == "show" || input == "s") {
+            ShowWindowAgain();
+        }
+        else if (input == "restore" || input == "r") {
+            RestoreWindow();
+        }
+        else if (input == "about" || input == "github" || input == "code") {
+            ShellExecute(NULL, L"open", L"https://github.com/kona-code/TrayMinimizer", NULL, NULL, SW_SHOWNORMAL);
+        }
+        else if (input == "author" || input == "publisher" || input == "kona") {
+            ShellExecute(NULL, L"open", L"https://github.com/kona-code/", NULL, NULL, SW_SHOWNORMAL);
+        }
+        else if (input == "update") {
+            ShellExecute(NULL, L"open", L"https://software.nightvoid.com/stable/#tray-minimizer", NULL, NULL, SW_SHOWNORMAL);
+        }
+        else if (input == "ver" || input == "version" || input == "v") {
+            std::cout << "Currently running version 1.0\n";
+        }
+        else if (input == "hide -console" || input == "exit" || input == "hc") {
+            HideFromTray();
+        }
+        else if (input == "terminate" || input == "quit") {
+            DebugConsole::Quit();
+        }
+        else if (input == "clear" || input == "clean" || input == "c") {
+            ClearConsole();
+        }
+        else {
+            DebugConsole::SetConsoleColor(12);
+            std::cout << "[ERR] Unknown command: '" << input << "', use 'help' to show all available commands." << std::endl;
+            DebugConsole::SetConsoleColor(7);
+        }
+    
+}
 
 void DebugConsole::ListWindows(const std::string& option) {
     if (option == "-h" || option == "-hidden") {
@@ -437,6 +487,7 @@ void DebugConsole::HelpFunction() {
     DebugConsole::SetConsoleColor(6);
     std::cout << "   Use if you want to recover a window from a previous session.\n";
     std::cout << "   You can narrow down you search by using shortcut 'CTRL + F' and entering you window title.\n\n";
+    DebugConsole::SetConsoleColor(14);
     std::cout << "  'clear'";
     DebugConsole::SetConsoleColor(6);
     std::cout << ", ";
