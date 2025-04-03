@@ -6,12 +6,12 @@
 // global instances
 TrayIcon g_TrayIcon;
 DebugConsole g_DebugConsole;
+DebugConsole* g_ConsolePtr;
 
 extern "C" int __argc;
 extern "C" char** __argv;
 
 void ProcessCmdLine() {
-    while (true) {
     AttachConsole(ATTACH_PARENT_PROCESS);
 
     FILE* fp;
@@ -25,9 +25,7 @@ void ProcessCmdLine() {
             fullCommand += " ";
         }
     }
-
-    std::cout << g_DebugConsole.RunCommand(fullCommand);
-    }
+    g_ConsolePtr->RunCommand(fullCommand);
 }
 
 // forward declaration of window procedure

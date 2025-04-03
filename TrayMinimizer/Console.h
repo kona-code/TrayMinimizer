@@ -39,7 +39,7 @@ public:
     void ShowFromTray();
     void HideFromTray();
     void RunCommandLoop();
-	std::string RunCommand(std::string command); // meant for command line arguments (being called thru CMD)
+	void RunCommand(std::string command); // meant for command line arguments (being called thru CMD)
 
 private:
     // function that runs the command loop
