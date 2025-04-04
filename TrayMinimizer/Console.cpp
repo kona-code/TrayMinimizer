@@ -112,15 +112,24 @@ void DebugConsole::RunCommand(std::string input) {
             ListWindows("-hidden");
         }
         else if (input == "hide" || input == "h") {
+            DebugConsole::SetConsoleColor(6);
+            std::cout << "\n[WRN] 'Hide' command is not yet been successfully debugged for CMD execution, submit window number twice.\n" << std::endl;
+            DebugConsole::SetConsoleColor(7);
             HideWindow();
         }
         else if (input == "show" || input == "s") {
+            DebugConsole::SetConsoleColor(12);
+            std::cout << "\n[ERR] 'Show' command has not been reworked for CMD execution.\n" << std::endl;
+            DebugConsole::SetConsoleColor(7);
             ShowWindowAgain();
         }
         /*else if (input == "show -force" || input == "show -f") {
             ShowWindowAgain();
         }*/
         else if (input == "restore" || input == "r") {
+            DebugConsole::SetConsoleColor(6);
+            std::cout << "\n[WRN] 'Restore' command is not yet been successfully debugged for CMD execution, submit window number twice.\n" << std::endl;
+            DebugConsole::SetConsoleColor(7);
             RestoreWindow();
         }
         else if (input == "about" || input == "github" || input == "code") {
@@ -146,7 +155,7 @@ void DebugConsole::RunCommand(std::string input) {
         }
         else {
             DebugConsole::SetConsoleColor(12);
-            std::cout << "[ERR] Unknown command: '" << input << "', use 'help' to show all available commands." << std::endl;
+            std::cout << "\n[ERR] Unknown command: '" << input << "', use 'help' to show all available commands." << std::endl;
             DebugConsole::SetConsoleColor(7);
         }
     
@@ -359,6 +368,7 @@ void DebugConsole::RestoreWindow() {
     std::cout << "[INF] Restore a window from the global list:\n";
     std::vector<WindowInfo> windows = FUNC::GetOpenWindows();  // get all windows
     size_t idx = 0;
+    std::string input;
 
     // List the windows
     for (const auto& win : windows) {
@@ -386,7 +396,6 @@ void DebugConsole::RestoreWindow() {
     // ask the user to select a window to restore
     while (true) {
         std::cout << "\nEnter window number to restore: ";
-        std::string input;
         std::getline(std::cin, input);
         if (FUNC::is_digits(input) && input.length() != 0) {
             int index = std::stoi(input);
